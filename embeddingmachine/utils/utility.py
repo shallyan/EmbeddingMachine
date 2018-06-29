@@ -16,3 +16,15 @@ def show_memory_use():
   strinfo = "\x1b[33m [Memory] Total Memory Use: {:.4f} MB \t Resident: {} Shared: {} UnshareData: {} UnshareStack: {} \x1b[0m".format( 
             total_memory, ru.ru_maxrss, ru.ru_ixrss, ru.ru_idrss, ru.ru_isrss)
   return strinfo
+
+def import_class(import_str):
+  mod_str, _sep, class_str = import_str.rpartition('.')
+  __import__(mod_str)
+  try:
+    return getattr(sys.modules[mod_str], class_str)
+  except AttributeError:
+    raise ImportError('Class {} cannot be found ({})'.format(
+                      class_str, traceback.format_exception(*sys.exc_info())))
+
+def import_object(import_str, *args, **kwargs):
+  return import_class(import_str)(*args, **kwargs)

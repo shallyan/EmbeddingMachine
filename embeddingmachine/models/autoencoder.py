@@ -6,25 +6,20 @@ import keras
 import keras.backend as K
 from keras import regularizers
 from keras.models import Sequential, Model
-from keras.layers import Dense, Input
+from keras.layers import Dense, Input, Flatten, Reshape
 from keras.activations import softmax
-from model import BasicModel
-from utils.utility import show_layer_info
+from embeddingmachine.models.basicmodel import BasicModel
+from embeddingmachine.utils.utility import show_layer_info
 
 class DNNAutoEncoder(BasicModel):
-  def __init__(self, config):
-    super(AutoEncoder, self).__init__(config)
+  def __init__(self, embedding_size, input_width, input_height, input_channel, encoder_sizes):
+    super(DNNAutoEncoder, self).__init__(embedding_size, input_width, input_height, input_channel)
     self.name = 'DNNAutoEncoder'
-    self.check_list = ['embedding_size', 'encoder_sizes', 'input_width', 'input_height', 'input_channel']
-    self.setup()
-    self.check()
+    self.encoder_sizes = encoder_sizes 
     print('[{}] init done'.format(self.name), end='\n')
 
-  def setup(self):
-    self.config.setdefault('encoder_sizes', [512, 256])
-
   def build(self):
-    input_shape = (self.config['input_width'], self.config['input_height'], self.config['input_channel'])
+    input_shape = (self.input_width, self.input_height, self.input_channel)
     input_obj = Input(name='input', shape=input_shape)
     show_layer_info('Input', input_obj)
 
@@ -33,16 +28,16 @@ class DNNAutoEncoder(BasicModel):
     
     # encoder
     encoder = flat_input
-    for encoder_size in self.config['encoder_sizes']:
+    for encoder_size in self.encoder_sizes:
       encoder = Dense(encoder_size, activation='relu')(encoder)
       show_layer_info('Encoder', encoder)
 
-    encoder = Dense(self.config['embedding_size'])(encoder)
+    encoder = Dense(self.embedding_size)(encoder)
     show_layer_info('EncoderOutput', encoder)
 
     # decoder
     decoder = encoder
-    for decoder_size in reversed(self.config['encoder_sizes']):
+    for decoder_size in reversed(self.encoder_sizes):
       decoder = Dense(decoder_size, activation='relu')(decoder)
       show_layer_info('Decoder', decoder)
 

@@ -1,4 +1,4 @@
 # -*- coding: utf8 -*-
 
-from .utils import *
-from .models import *
+import sys
+sys.path.insert(0, "models/")
