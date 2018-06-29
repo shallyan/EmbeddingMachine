@@ -43,7 +43,7 @@ class DNNAutoEncoder(BasicModel):
 
     from operator import mul
     output_size = reduce(mul, input_shape)
-    decoder = Dense(output_size)(decoder)
+    decoder = Dense(output_size, activation='tanh')(decoder)
     show_layer_info('DecoderOutput', decoder)
 
     output_obj = Reshape(input_shape)(decoder)
