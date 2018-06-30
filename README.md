@@ -11,4 +11,4 @@ Please see imageexample.py and textexample.py.
 - python imageexample.py
 - python textexample.py
 
-The API are universal, including build, fit, predict, load_weights, save_weights and so on.
+The APIs are universal, including build, fit, predict, load_weights, save_weights and so on, which are similar to Keras.
