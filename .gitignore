@@ -38,3 +38,6 @@ nohup.out
 data/*
 
 *.swp
+dist/
+EmbeddingMachine.egg-info/
+build/

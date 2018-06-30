@@ -1,12 +1,16 @@
 # EmbeddingMachine
 Different embedding models for image and text, now including DNNAutoEncoder, TFIDFSum.
 
-## Python package dependencies 
+## Install
+python setup.py install
+
+### Python package dependencies 
 - keras
 - tqdm
+- numpy
 
 ## Usage
-Please see imageexample.py and textexample.py.
+Please see example/imageexample.py and example/textexample.py.
 
 - python imageexample.py
 - python textexample.py
