@@ -38,13 +38,9 @@ class TFIDFSum(object):
       self.word_idf[word] = myLog2(doc_cnt * 1.0 / self.word_idf[word])
 
   def _normalize(self, vec):
-    sum = 0.0 
-    for e in vec:
-      sum += e*e
-    mode = math.sqrt(sum) 
+    mode = np.linalg.norm(vec)
     if mode > 1e-10:
-      for i in range(len(vec)):
-        vec[i] = vec[i] / mode
+      vec = vec/mode
     return vec
 
   def load_word_embedding(self):
@@ -64,8 +60,7 @@ class TFIDFSum(object):
           raise Exception('Error, word dim not match')
         for i in range(vec_dim):
           vec.append(float(fields[i+1].strip()))
-        vec = self._normalize(vec)
-        self.word_embedding[word] = np.array(vec)
+        self.word_embedding[word] = self._normalize(np.array(vec))
 
     if all_word_num != len(self.word_embedding):
       raise Exception('Error, word num not match')
@@ -82,7 +77,7 @@ class TFIDFSum(object):
       if word in self.word_embedding:
         word_weight = self.word_idf[word] if word in self.word_idf else 100.0
         doc_vec = doc_vec + self.word_embedding[word] * word_weight
-    return doc_vec
+    return self._normalize(doc_vec)
 
   def save_weights(self, model_path):
     with open(model_path, 'w') as f:
